@@ -8,11 +8,14 @@ import { Product } from '../model/product';
 })
 export class ProductService {
 
-  private baseUrl = 'http://localhost:8080/api/products';
-  constructor(private httpClient: HttpClient) { }
+  private baseUrl = 'http://localhost:8080/api/products'; // 'http://localhost:8080/api/products&size=100'                                     
+  constructor(private httpClient: HttpClient) { }         // SPRING REST ONLY SHOWS 20 PRODUCTS use size to change
 
-  getProductList(): Observable<Product[]> {
-    return this.httpClient.get<GetResponse>(this.baseUrl).pipe
+  getProductList(theCategoryId: number): Observable<Product[]> {
+    //need to build Url based on category id
+    
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`
+    return this.httpClient.get<GetResponse>(searchUrl).pipe
     (map(response => response._embedded.products)
   );
   }
